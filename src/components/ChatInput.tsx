@@ -178,11 +178,14 @@ export default function ChatInput() {
     const newMessages: CoreMessage[] = [...messages, { content: input, role: "user" }];
     setMessages(newMessages);
     setInput("");
+
+    // Lấy user_id từ localStorage
+    const userId = localStorage.getItem("user_id") || "default_user";
   
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({ messages: newMessages, userId }),
         headers: { "Content-Type": "application/json" },
       });
       const textResult = (await response.json()) as CoreMessage;

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useAtom } from "jotai";
@@ -17,7 +18,7 @@ export default function ChatterBox() {
     setKey(prevKey => prevKey + 1);
     
     // Reset visibility khi có tin nhắn mới
-    if (message) {
+    if (message)  {
       setIsVisible(true);
       setIsHiding(false);
       
