@@ -2,7 +2,7 @@ import { type CoreMessage } from "~/types/chat";
 
 export const maxDuration = 30;
 
-const AMI_API_URL = "https://boot-jean-mods-ray.trycloudflare.com/chat";
+const AMI_API_URL = " https://brush-categories-bracelet-library.trycloudflare.com/chat";
 
 export async function POST(req: Request) {
   const { messages, username = "bạn", userId = "default_user" } = await req.json() as { 
