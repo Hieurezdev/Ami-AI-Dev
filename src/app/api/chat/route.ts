@@ -2,20 +2,20 @@ import { type CoreMessage } from "~/types/chat";
 
 export const maxDuration = 30;
 
-const AMI_API_URL = "https://tahoe-geo-warrior-david.trycloudflare.com/chat";
+const AMI_API_URL = process.env.API_URL;
 
 export async function POST(req: Request) {
-  const { messages, username = "bạn", userId = "default_user" } = await req.json() as { 
+  const { messages, username = "bạn", userId = "default_user" } = await req.json() as {
     messages: CoreMessage[],
     username?: string,
     userId?: string
   };
-  
+
   // Lọc bỏ messages rỗng hoặc không hợp lệ
-  const validMessages = messages.filter(msg => 
+  const validMessages = messages.filter(msg =>
     msg && msg.content && typeof msg.content === 'string' && msg.content.trim().length > 0
   );
-  
+
   console.info("Generating text with valid messages", validMessages);
 
   // Kiểm tra có message hợp lệ không
@@ -42,6 +42,10 @@ export async function POST(req: Request) {
   }
 
   try {
+    if (!AMI_API_URL) {
+      throw new Error("AMI_API_URL is not defined");
+    }
+
     // Gửi request đến Ami API
     const response = await fetch(AMI_API_URL, {
       method: "POST",
@@ -70,10 +74,10 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error("Ami API error:", error);
-    
+
     // Fallback response khi API lỗi
     const fallbackMessage = `Xin lỗi ${username}, em đang gặp chút vấn đề kỹ thuật. Em sẽ cố gắng trả lời sau nhé. Anh có thể thử lại sau một chút không?`;
-    
+
     return new Response(JSON.stringify({
       role: "assistant",
       content: fallbackMessage,
